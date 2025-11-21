@@ -1,11 +1,10 @@
 import requests
-import os
 import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
 
-# Bot configuration
-BOT_TOKEN = os.environ['BOT_TOKEN']
+# Bot configuration - DIRECT TOKEN
+BOT_TOKEN = "7895976628:AAHKxnXhuDVSRl689E_wYY7gybS-u-oVX9k"
 FLUX_API_URL = "https://flux-pro.vercel.app/generate?q="
 
 # Set up logging
@@ -18,15 +17,15 @@ logger = logging.getLogger(__name__)
 async def start(update: Update, context: CallbackContext) -> None:
     """Send welcome message when the command /start is issued."""
     welcome_text = """
-    🎨 **Welcome to Flux Image Generator Bot!**
+    🎨 Welcome to Flux Image Generator Bot!
     
     I can generate images from your text prompts.
     
-    **How to use:**
+    How to use:
     Simply type any prompt like:
-    - `black cat`
-    - `beautiful sunset` 
-    - `futuristic city`
+    - black cat
+    - beautiful sunset 
+    - futuristic city
     
     And I'll generate an image for you!
     """
@@ -37,7 +36,7 @@ async def generate_image(update: Update, context: CallbackContext) -> None:
     user_message = update.message.text
     
     if not user_message or user_message.strip() == "":
-        await update.message.reply_text("❌ Please provide a prompt. Example: `black cat`")
+        await update.message.reply_text("❌ Please provide a prompt. Example: black cat")
         return
     
     try:
@@ -61,8 +60,7 @@ async def generate_image(update: Update, context: CallbackContext) -> None:
             with open("generated_image.jpg", "rb") as photo:
                 await update.message.reply_photo(
                     photo=photo,
-                    caption=f"🖼️ Generated image for: `{prompt}`",
-                    parse_mode='Markdown'
+                    caption=f"🖼️ Generated image for: {prompt}"
                 )
             
             logger.info(f"Image generated successfully for prompt: {prompt}")
@@ -82,21 +80,21 @@ async def generate_image(update: Update, context: CallbackContext) -> None:
 async def help_command(update: Update, context: CallbackContext) -> None:
     """Send help message when the command /help is issued."""
     help_text = """
-    🤖 **Flux Image Generator Bot Help**
+    🤖 Flux Image Generator Bot Help
     
-    **Commands:**
+    Commands:
     /start - Start the bot and see welcome message
     /help - Show this help message
     
-    **How to generate images:**
+    How to generate images:
     Simply type any text prompt and I'll generate an image for you!
     
-    **Examples:**
-    - `cute puppy playing in garden`
-    - `abstract art with blue colors` 
-    - `landscape of mountains`
+    Examples:
+    - cute puppy playing in garden
+    - abstract art with blue colors 
+    - landscape of mountains
     
-    **Note:** Image generation may take a few seconds.
+    Note: Image generation may take a few seconds.
     """
     await update.message.reply_text(help_text)
 
